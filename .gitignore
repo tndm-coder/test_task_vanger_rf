@@ -17,3 +17,10 @@ env/
 # OS
 .DS_Store
 Thumbs.db
+changes.patch
+
+*.py[cod]
+*.sqlite3
+.env
+media/
+staticfiles/
