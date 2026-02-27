@@ -15,36 +15,43 @@
   <link rel="stylesheet" href="{% static 'slider/style.css' %}">
 </head>
 <body>
-  <main class="py-5">
+  <main class="py-4 py-md-5">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-xl-9">
-          <section class="gallery-card p-3 p-md-4">
+          <section class="gallery-card p-3 p-md-4 p-lg-5">
             <h1 class="gallery-title mb-4">Слайдер галереи</h1>
 
-            <div class="slider-main js-slider-main mb-3">
-              {% for slide in slides %}
-                <div class="slide-main-item">
-                  <button class="slide-open-btn" type="button" data-index="{{ forloop.counter0 }}" aria-label="Открыть в полноэкранном режиме">
+            {% if slides %}
+              <div class="slider-main js-slider-main mb-3">
+                {% for slide in slides %}
+                  <div class="slide-main-item">
+                    <button class="slide-open-btn" type="button" data-index="{{ forloop.counter0 }}" aria-label="Открыть в полноэкранном режиме">
+                      <img src="{{ slide.image_url }}" alt="{{ slide.title }}">
+                    </button>
+                  </div>
+                {% endfor %}
+              </div>
+
+              <div class="slider-nav js-slider-nav">
+                {% for slide in slides %}
+                  <div class="slide-nav-item">
                     <img src="{{ slide.image_url }}" alt="{{ slide.title }}">
-                  </button>
-                </div>
-              {% endfor %}
-            </div>
+                  </div>
+                {% endfor %}
+              </div>
 
-            <div class="slider-nav js-slider-nav">
-              {% for slide in slides %}
-                <div class="slide-nav-item">
-                  <img src="{{ slide.image_url }}" alt="{{ slide.title }}">
-                </div>
-              {% endfor %}
-            </div>
-
-            <div class="visually-hidden" id="lightbox-gallery">
-              {% for slide in slides %}
-                <a href="{{ slide.image_url }}" class="glightbox" data-gallery="slider-gallery" data-title="{{ slide.title }}">{{ slide.title }}</a>
-              {% endfor %}
-            </div>
+              <div class="visually-hidden" id="lightbox-gallery">
+                {% for slide in slides %}
+                  <a href="{{ slide.image_url }}" class="glightbox" data-gallery="slider-gallery" data-title="{{ slide.title }}">{{ slide.title }}</a>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="gallery-empty text-center py-5 px-3">
+                <h2 class="h5 mb-2">Слайды пока не добавлены</h2>
+                <p class="mb-0 text-secondary">Загрузите изображения в админке, чтобы галерея появилась на странице.</p>
+              </div>
+            {% endif %}
           </section>
         </div>
       </div>
