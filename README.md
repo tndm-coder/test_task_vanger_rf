@@ -129,3 +129,38 @@ DB_ENGINE=django.db.backends.sqlite3 python manage.py test
   - drag&drop порядка в админке;
   - синхронизация main/nav в слайдере;
   - открытие и листание в fullscreen.
+
+## Pixel-perfect артефакты (автосравнение с макетом)
+
+Чтобы проверяющий мог воспроизвести сравнение, в репозитории должны быть:
+
+- baseline-макеты из Figma: `slider/pngs_for_testing/desktop.png` и `slider/pngs_for_testing/mobile.png`;
+- скрипт сравнения `pixel_compare.py` (генерирует actual/diff/report);
+- результаты сравнения в `artifacts_pixel/` (опционально, если хотите приложить готовые артефакты).
+
+### Как запустить
+
+```powershell
+# 1) активировать окружение
+.\.venv\Scripts\Activate.ps1
+
+# 2) установить зависимости для сравнения
+pip install pillow playwright
+python -m playwright install chromium
+
+# 3) запустить локальный сервер (в отдельном терминале)
+$env:DB_ENGINE="django.db.backends.sqlite3"
+python manage.py runserver
+
+# 4) в текущем терминале выполнить сравнение
+python pixel_compare.py
+```
+
+### Что получится
+
+- `artifacts_pixel/actual/desktop.png`, `artifacts_pixel/actual/mobile.png` — автоскрины страницы;
+- `artifacts_pixel/diff/desktop.png`, `artifacts_pixel/diff/mobile.png` — визуальная разница;
+- `artifacts_pixel/diff/report.json` — процент отличий и служебные метрики.
+
+Если baseline PNG не положены в репозиторий, проверяющий не сможет воспроизвести `report.json`.
+
