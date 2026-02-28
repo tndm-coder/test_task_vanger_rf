@@ -29,6 +29,29 @@ DB_ENGINE=django.db.backends.sqlite3 python manage.py createsuperuser
 DB_ENGINE=django.db.backends.sqlite3 python manage.py runserver
 ```
 
+
+## Быстрый старт (Windows PowerShell + SQLite)
+
+Если проверка идёт на Windows, используйте PowerShell-команды:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r req.pip
+$env:DB_ENGINE="django.db.backends.sqlite3"
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver
+```
+
+Smoke/autotests в PowerShell:
+
+```powershell
+$env:DB_ENGINE="django.db.backends.sqlite3"
+python manage.py check
+python manage.py test
+```
+
 ## Запуск с MySQL (основной режим)
 
 Перед запуском задайте переменные окружения:
@@ -75,3 +98,34 @@ python manage.py runserver
 DB_ENGINE=django.db.backends.sqlite3 python manage.py check
 DB_ENGINE=django.db.backends.sqlite3 python manage.py test
 ```
+
+
+## Небольшой план тестирования (этап 5)
+
+Упор делаем на автотесты, без разворачивания большой QA-документации.
+
+### Приоритет 1 — backend автотесты (обязательно)
+
+1. **Модель `SliderItem`**
+   - проверка русских `verbose_name`/`verbose_name_plural`;
+   - проверка `ordering`;
+   - проверка `__str__`.
+2. **Админка `SliderItemAdmin`**
+   - проверка конфигурации списка (`list_display`, `list_display_links`, `ordering`);
+   - проверка рендера миниатюры и fallback, если изображения нет.
+3. **Представление `slider_page`**
+   - пустое состояние (сообщение «Слайды пока не добавлены»);
+   - корректная выборка с `select_related(...).order_by(...)`;
+   - корректная передача слайдов в HTML (title, image URL, индексы для fullscreen).
+
+### Приоритет 2 — smoke checks (обязательно)
+
+- `python manage.py check`
+- `python manage.py test`
+
+### Приоритет 3 — ручная проверка (коротко)
+
+- 5–10 минут на проверку в браузере:
+  - drag&drop порядка в админке;
+  - синхронизация main/nav в слайдере;
+  - открытие и листание в fullscreen.
