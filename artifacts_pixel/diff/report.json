@@ -2,9 +2,9 @@
   "url": "http://127.0.0.1:8000/",
   "cases": {
     "desktop": {
-      "baseline": "C:\\Users\\8twii\\PycharmProjects\\test_task_vanger_rf\\slider\\pngs_for_testing\\desktop.png",
-      "actual": "C:\\Users\\8twii\\PycharmProjects\\test_task_vanger_rf\\artifacts_pixel\\actual\\desktop.png",
-      "diff": "C:\\Users\\8twii\\PycharmProjects\\test_task_vanger_rf\\artifacts_pixel\\diff\\desktop.png",
+      "baseline": "slider/pngs_for_testing/desktop.png",
+      "actual": "artifacts_pixel/actual/desktop.png",
+      "diff": "artifacts_pixel/diff/desktop.png",
       "size": {
         "width": 1466,
         "height": 2047
@@ -13,9 +13,9 @@
       "changed_percent": 99.981
     },
     "mobile": {
-      "baseline": "C:\\Users\\8twii\\PycharmProjects\\test_task_vanger_rf\\slider\\pngs_for_testing\\mobile.png",
-      "actual": "C:\\Users\\8twii\\PycharmProjects\\test_task_vanger_rf\\artifacts_pixel\\actual\\mobile.png",
-      "diff": "C:\\Users\\8twii\\PycharmProjects\\test_task_vanger_rf\\artifacts_pixel\\diff\\mobile.png",
+      "baseline": "slider/pngs_for_testing/mobile.png",
+      "actual": "artifacts_pixel/actual/mobile.png",
+      "diff": "artifacts_pixel/diff/mobile.png",
       "size": {
         "width": 375,
         "height": 1599

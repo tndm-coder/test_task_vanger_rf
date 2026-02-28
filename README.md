@@ -144,15 +144,19 @@ DB_ENGINE=django.db.backends.sqlite3 python manage.py test
 # 1) активировать окружение
 .\.venv\Scripts\Activate.ps1
 
-# 2) установить зависимости для сравнения
-pip install pillow playwright
+# 2) установить проектные зависимости + браузер для Playwright
+pip install -r req.pip
 python -m playwright install chromium
 
 # 3) запустить локальный сервер (в отдельном терминале)
 $env:DB_ENGINE="django.db.backends.sqlite3"
 python manage.py runserver
 
-# 4) в текущем терминале выполнить сравнение
+# 4) (опционально) переопределить URL и ожидание рендера
+$env:PIXEL_COMPARE_URL="http://127.0.0.1:8000/"
+$env:PIXEL_COMPARE_WAIT_MS="1200"
+
+# 5) в текущем терминале выполнить сравнение
 python pixel_compare.py
 ```
 
@@ -163,4 +167,6 @@ python pixel_compare.py
 - `artifacts_pixel/diff/report.json` — процент отличий и служебные метрики.
 
 Если baseline PNG не положены в репозиторий, проверяющий не сможет воспроизвести `report.json`.
+
+> Примечание: в `report.json` пути сохраняются в **относительном** виде (от корня репозитория), чтобы артефакты были переносимыми между машинами.
 
