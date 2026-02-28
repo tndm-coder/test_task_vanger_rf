@@ -5,10 +5,17 @@ Django settings for config project.
 import os
 from pathlib import Path
 
+from django.core.exceptions import ImproperlyConfigured
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-change-me")
 DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() in {"1", "true", "yes", "on"}
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+if not SECRET_KEY:
+    if DEBUG:
+        SECRET_KEY = "django-insecure-dev-only-key"
+    else:
+        raise ImproperlyConfigured("DJANGO_SECRET_KEY must be set when DJANGO_DEBUG is disabled")
 ALLOWED_HOSTS = [host.strip() for host in os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",") if host.strip()]
 
 INSTALLED_APPS = [
@@ -64,14 +71,25 @@ if DB_ENGINE == "django.db.backends.sqlite3":
         }
     }
 else:
+    mysql_database = os.getenv("MYSQL_DATABASE")
+    mysql_user = os.getenv("MYSQL_USER")
+    mysql_password = os.getenv("MYSQL_PASSWORD")
+    mysql_host = os.getenv("MYSQL_HOST", "127.0.0.1")
+    mysql_port = os.getenv("MYSQL_PORT", "3306")
+
+    if not mysql_database or not mysql_user or not mysql_password:
+        raise ImproperlyConfigured(
+            "MYSQL_DATABASE, MYSQL_USER и MYSQL_PASSWORD должны быть заданы для MySQL"
+        )
+
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
-            "NAME": os.getenv("MYSQL_DATABASE", "slider_db"),
-            "USER": os.getenv("MYSQL_USER", "slider_user"),
-            "PASSWORD": os.getenv("MYSQL_PASSWORD", "slider_password"),
-            "HOST": os.getenv("MYSQL_HOST", "127.0.0.1"),
-            "PORT": os.getenv("MYSQL_PORT", "3306"),
+            "NAME": mysql_database,
+            "USER": mysql_user,
+            "PASSWORD": mysql_password,
+            "HOST": mysql_host,
+            "PORT": mysql_port,
             "OPTIONS": {
                 "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
                 "charset": "utf8mb4",

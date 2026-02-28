@@ -41,6 +41,15 @@ class SliderAdminTests(SimpleTestCase):
         obj = SimpleNamespace(image=None, title="Без фото")
         self.assertEqual(self.admin_instance.thumbnail(obj), "—")
 
+
+    def test_thumbnail_returns_dash_when_image_url_is_invalid(self):
+        class BrokenImage:
+            @property
+            def url(self):
+                raise ValueError("bad image")
+
+        obj = SimpleNamespace(image=BrokenImage(), title="Битое")
+        self.assertEqual(self.admin_instance.thumbnail(obj), "—")
     def test_thumbnail_renders_image_tag(self):
         obj = SimpleNamespace(image=SimpleNamespace(url="/media/demo.jpg"), title="Демо")
 
@@ -57,6 +66,26 @@ class SliderPageTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Слайды пока не добавлены")
 
+
+    def test_slider_page_skips_invalid_image_urls(self):
+        request = RequestFactory().get("/")
+
+        class BrokenImage:
+            @property
+            def url(self):
+                raise ValueError("broken")
+
+        valid = SimpleNamespace(title="Ок", image=SimpleNamespace(url="/media/ok.jpg"))
+        invalid = SimpleNamespace(title="Bad", image=BrokenImage())
+
+        with patch("slider.views.SliderItem.objects") as manager:
+            manager.select_related.return_value.order_by.return_value = [valid, invalid]
+            response = slider_page(request)
+
+        html = response.content.decode("utf-8")
+        self.assertIn("Ок", html)
+        self.assertNotIn("Bad", html)
+        self.assertIn('href="/media/ok.jpg"', html)
     def test_slider_page_uses_ordering_and_renders_slides(self):
         request = RequestFactory().get("/")
 

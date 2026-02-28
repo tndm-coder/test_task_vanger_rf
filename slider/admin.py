@@ -15,9 +15,15 @@ class SliderItemAdmin(SortableAdminMixin, admin.ModelAdmin):
     def thumbnail(self, obj):
         if not obj.image:
             return "—"
+
+        try:
+            image_url = obj.image.url
+        except (AttributeError, ValueError, OSError):
+            return "—"
+
         return format_html(
             '<img src="{}" alt="{}" style="height: 56px; width: 100px; object-fit: cover; border-radius: 6px;" />',
-            obj.image.url,
+            image_url,
             obj.title,
         )
 
