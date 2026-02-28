@@ -6,33 +6,47 @@ $(function () {
     return;
   }
 
+  const slidesCount = $main.children().length;
+
   $main.slick({
     arrows: false,
     slidesToShow: 1,
     slidesToScroll: 1,
     asNavFor: '.js-slider-nav',
     adaptiveHeight: true,
-    infinite: $main.children().length > 1,
+    infinite: slidesCount > 1,
   });
 
   $nav.slick({
-    arrows: true,
-    slidesToShow: 4,
+    arrows: false,
+    slidesToShow: 5,
     slidesToScroll: 1,
     asNavFor: '.js-slider-main',
     focusOnSelect: true,
-    infinite: $nav.children().length > 4,
+    infinite: slidesCount > 5,
     responsive: [
       {
         breakpoint: 992,
-        settings: { slidesToShow: 3 },
+        settings: { slidesToShow: 4 },
       },
       {
         breakpoint: 576,
-        settings: { slidesToShow: 2 },
+        settings: { slidesToShow: 5 },
       },
     ],
   });
+
+  $('.js-main-prev').on('click', function () {
+    $main.slick('slickPrev');
+  });
+
+  $('.js-main-next').on('click', function () {
+    $main.slick('slickNext');
+  });
+
+  if (slidesCount < 2) {
+    $('.slider-control').hide();
+  }
 
   const lightbox = GLightbox({
     selector: '.glightbox',

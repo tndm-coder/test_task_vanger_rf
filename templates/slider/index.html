@@ -3,58 +3,104 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Галерея</title>
+  <title>Космическое агентство</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
   {% load static %}
   <link rel="stylesheet" href="{% static 'slider/style.css' %}">
 </head>
 <body>
-  <main class="py-4 py-md-5">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-12 col-xl-9">
-          <section class="gallery-card p-3 p-md-4 p-lg-5">
-            <h1 class="gallery-title mb-4">Слайдер галереи</h1>
+  <main class="landing-page">
+    <div class="landing-shell">
+      <header class="landing-header">
+        <a href="#" class="brand-link" aria-label="NASA home">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA">
+        </a>
+        <nav class="header-nav" aria-label="Главная навигация">
+          <a href="#features">Преимущества</a>
+          <a href="#photos">Фотографии</a>
+        </nav>
+        <button type="button" class="login-btn">Вход</button>
+      </header>
 
-            {% if slides %}
-              <div class="slider-main js-slider-main mb-3">
-                {% for slide in slides %}
-                  <div class="slide-main-item">
-                    <button class="slide-open-btn" type="button" data-index="{{ forloop.counter0 }}" aria-label="Открыть в полноэкранном режиме">
-                      <img src="{{ slide.image_url }}" alt="{{ slide.title }}">
-                    </button>
-                  </div>
-                {% endfor %}
-              </div>
+      <section class="hero-section" id="features">
+        <h1 class="hero-title">Космическое агентство</h1>
+        <p class="hero-text">Национальное управление по аэронавтике и исследованию космического пространства — ведомство, ответственное за космическую программу США и гражданские космические исследования правительства США.</p>
 
-              <div class="slider-nav js-slider-nav">
-                {% for slide in slides %}
-                  <div class="slide-nav-item">
-                    <img src="{{ slide.image_url }}" alt="{{ slide.title }}">
-                  </div>
-                {% endfor %}
-              </div>
+        <div class="hero-grid">
+          <figure class="hero-image-wrap">
+            <img src="https://images.unsplash.com/photo-1614728263952-84ea256f9679?auto=format&fit=crop&w=1000&q=80" alt="Планета Земля из космоса">
+          </figure>
 
-              <div class="visually-hidden" id="lightbox-gallery">
-                {% for slide in slides %}
-                  <a href="{{ slide.image_url }}" class="glightbox" data-gallery="slider-gallery" data-title="{{ slide.title }}">{{ slide.title }}</a>
-                {% endfor %}
-              </div>
-            {% else %}
-              <div class="gallery-empty text-center py-5 px-3">
-                <h2 class="h5 mb-2">Слайды пока не добавлены</h2>
-                <p class="mb-0 text-secondary">Загрузите изображения в админке, чтобы галерея появилась на странице.</p>
-              </div>
-            {% endif %}
-          </section>
+          <div class="feature-list">
+            <article class="feature-item">
+              <span class="feature-icon">🛰️</span>
+              <p>Связь и навигационные орбиты</p>
+            </article>
+            <article class="feature-item">
+              <span class="feature-icon">🛠️</span>
+              <p>Лучшие инженерные и технологические решения</p>
+            </article>
+            <article class="feature-item">
+              <span class="feature-icon">🌙</span>
+              <p>Исследовательские станции на Луне — шаг к новым открытиям</p>
+            </article>
+            <article class="feature-item">
+              <span class="feature-icon">🧭</span>
+              <p>Золотой стандарт безопасности исследований</p>
+            </article>
+          </div>
         </div>
-      </div>
+      </section>
+
+      <section class="photos-section" id="photos">
+        <h2 class="photos-title">Фотографии</h2>
+
+        {% if slides %}
+          <div class="photos-slider-wrap">
+            <button class="slider-control slider-prev js-main-prev" type="button" aria-label="Предыдущий слайд">
+              <span aria-hidden="true">‹</span>
+            </button>
+
+            <div class="slider-main js-slider-main">
+              {% for slide in slides %}
+                <div class="slide-main-item">
+                  <button class="slide-open-btn" type="button" data-index="{{ forloop.counter0 }}" aria-label="Открыть в полноэкранном режиме">
+                    <img src="{{ slide.image_url }}" alt="{{ slide.title }}">
+                  </button>
+                </div>
+              {% endfor %}
+            </div>
+
+            <button class="slider-control slider-next js-main-next" type="button" aria-label="Следующий слайд">
+              <span aria-hidden="true">›</span>
+            </button>
+          </div>
+
+          <div class="slider-nav js-slider-nav">
+            {% for slide in slides %}
+              <div class="slide-nav-item">
+                <img src="{{ slide.image_url }}" alt="{{ slide.title }}">
+              </div>
+            {% endfor %}
+          </div>
+
+          <div class="visually-hidden" id="lightbox-gallery">
+            {% for slide in slides %}
+              <a href="{{ slide.image_url }}" class="glightbox" data-gallery="slider-gallery" data-title="{{ slide.title }}">{{ slide.title }}</a>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="gallery-empty text-center py-5 px-3">
+            <h3 class="h5 mb-2">Слайды пока не добавлены</h3>
+            <p class="mb-0">Загрузите изображения в админке, чтобы галерея появилась на странице.</p>
+          </div>
+        {% endif %}
+      </section>
     </div>
   </main>
 
